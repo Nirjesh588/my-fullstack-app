@@ -1,0 +1,41 @@
+services:
+  # Main application service
+  - type: web
+    name: tutor-app
+    runtime: java
+    jdkVersion: 17
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar target/tutor-*.jar
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SERVER_PORT
+        value: ${PORT}
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - key: SPRING_DATASOURCE_USERNAME
+        value: ${DB_USER}
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: ${DB_PASSWORD}
+    dependsOn:
+      - tutor-database
+
+  # PostgreSQL Database
+  - type: postgres
+    name: tutor-database
+    databaseName: tutorstudentDB
+    user: postgres
+    plan: free
+    ipAllowList: []
+    advanced:
+      autoGeneratePassword: true
+
+  # Adminer Database Management
+  - type: adminer
+    name: tutor-adminer
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        value: postgres://postgres:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/tutorstudentDB
+    dependsOn:
+      - tutor-database
