@@ -12,7 +12,6 @@ services:
         value: 8080
       - key: SERVER_PORT
         value: ${PORT}
-      # Use Render-generated PostgreSQL connection variables
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://${tutor-database.internalAddress}:${tutor-database.internalPort}/${tutor-database.database}
       - key: SPRING_DATASOURCE_USERNAME
@@ -22,20 +21,20 @@ services:
     dependsOn:
       - tutor-database
 
-  - type: postgres
+  # PostgreSQL Database (FIXED TYPE)
+  - type: postgresql
     name: tutor-database
     databaseName: tutorstudentDB
     user: postgres
     plan: free
     ipAllowList: []
     advanced:
-      autoGeneratePassword: true  # Password is in ${tutor-database.password}
+      autoGeneratePassword: true
 
   - type: adminer
     name: tutor-adminer
     plan: free
     envVars:
-      # Use Render's PostgreSQL connection variables
       - key: DATABASE_URL
         value: postgres://${tutor-database.user}:${tutor-database.password}@${tutor-database.internalAddress}:${tutor-database.internalPort}/${tutor-database.database}
     dependsOn:
