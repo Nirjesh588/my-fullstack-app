@@ -1,4 +1,5 @@
 services:
+  # Main Spring Boot App
   - type: web
     name: tutor-app
     runtime: java
@@ -21,8 +22,9 @@ services:
     dependsOn:
       - tutor-database
 
-  # PostgreSQL Database (FIXED TYPE)
-  - type: postgresql
+  # ✅ PostgreSQL Database (Corrected)
+  - type: pserv
+    env: postgres
     name: tutor-database
     databaseName: tutorstudentDB
     user: postgres
@@ -31,6 +33,7 @@ services:
     advanced:
       autoGeneratePassword: true
 
+  # Adminer UI
   - type: adminer
     name: tutor-adminer
     plan: free
