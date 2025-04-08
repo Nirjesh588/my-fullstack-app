@@ -1,5 +1,5 @@
 services:
-  # Main Spring Boot App
+  # 🧠 Spring Boot App
   - type: web
     name: tutor-app
     runtime: java
@@ -22,7 +22,7 @@ services:
     dependsOn:
       - tutor-database
 
-  # ✅ PostgreSQL Database (Corrected)
+  # 🐘 PostgreSQL Database
   - type: pserv
     env: postgres
     name: tutor-database
@@ -33,10 +33,14 @@ services:
     advanced:
       autoGeneratePassword: true
 
-  # Adminer UI
-  - type: adminer
+  # 🛠️ Adminer as a custom web service
+  - type: web
     name: tutor-adminer
+    runtime: docker
     plan: free
+    dockerfilePath: ""  # Not needed for public images
+    image:
+      url: adminer
     envVars:
       - key: DATABASE_URL
         value: postgres://${tutor-database.user}:${tutor-database.password}@${tutor-database.internalAddress}:${tutor-database.internalPort}/${tutor-database.database}
