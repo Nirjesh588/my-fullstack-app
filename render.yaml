@@ -2,11 +2,8 @@ services:
   # 🧠 Spring Boot App
   - type: web
     name: tutor-app
-    runtime: java
-    jdkVersion: 17
-    buildCommand: |
-      chmod +x mvnw
-      ./mvnw clean install
+    env: java
+    buildCommand: ./mvnw clean install
     startCommand: java -jar target/tutor-*.jar
     envVars:
       - key: PORT
@@ -14,35 +11,24 @@ services:
       - key: SERVER_PORT
         value: ${PORT}
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://${tutor-database.internalAddress}:${tutor-database.internalPort}/${tutor-database.database}
+        value: jdbc:postgresql://${tutor-database.internalHostname}:${tutor-database.internalPort}/tutorstudentdb
       - key: SPRING_DATASOURCE_USERNAME
-        value: ${tutor-database.user}
+        value: ${tutor-database.username}
       - key: SPRING_DATASOURCE_PASSWORD
         value: ${tutor-database.password}
-    dependsOn:
-      - tutor-database
 
   # 🐘 PostgreSQL Database
   - type: pserv
-    env: postgres
     name: tutor-database
-    databaseName: tutorstudentDB
-    user: postgres
+    env: postgres
     plan: free
-    ipAllowList: []
-    advanced:
-      autoGeneratePassword: true
 
-  # 🛠️ Adminer as a custom web service
+  # 🛠️ Adminer UI from Docker Hub
   - type: web
     name: tutor-adminer
-    runtime: docker
-    plan: free
-    dockerfilePath: ""  # Not needed for public images
     image:
       url: adminer
+    plan: free
     envVars:
       - key: DATABASE_URL
-        value: postgres://${tutor-database.user}:${tutor-database.password}@${tutor-database.internalAddress}:${tutor-database.internalPort}/${tutor-database.database}
-    dependsOn:
-      - tutor-database
+        value: postgres://${tutor-database.username}:${tutor-database.password}@${tutor-database.internalHostname}:${tutor-database.internalPort}/tutorstudentdb
