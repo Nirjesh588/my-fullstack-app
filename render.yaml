@@ -2,33 +2,28 @@ services:
   # 🧠 Spring Boot App
   - type: web
     name: tutor-app
-    env: java
-    buildCommand: ./mvnw clean install
-    startCommand: java -jar target/tutor-*.jar
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: PORT
         value: 8080
       - key: SERVER_PORT
         value: ${PORT}
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://${tutor-database.internalHostname}:${tutor-database.internalPort}/tutorstudentdb
+        value: jdbc:postgresql://<INTERNAL_HOSTNAME>:5432/<DB_NAME>
       - key: SPRING_DATASOURCE_USERNAME
-        value: ${tutor-database.username}
+        value: <DB_USER>
       - key: SPRING_DATASOURCE_PASSWORD
-        value: ${tutor-database.password}
+        value: <DB_PASSWORD>
 
-  # 🐘 PostgreSQL Database
-  - type: pserv
-    name: tutor-database
-    env: postgres
-    plan: free
-
-  # 🛠️ Adminer UI from Docker Hub
+  # 🛠️ Adminer
   - type: web
     name: tutor-adminer
+    runtime: docker
     image:
       url: adminer
     plan: free
     envVars:
-      - key: DATABASE_URL
-        value: postgres://${tutor-database.username}:${tutor-database.password}@${tutor-database.internalHostname}:${tutor-database.internalPort}/tutorstudentdb
+      - key: ADMINER_DEFAULT_SERVER
+        value: <INTERNAL_HOSTNAME>
