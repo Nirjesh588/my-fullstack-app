@@ -1,29 +1,15 @@
 services:
-  # 🧠 Spring Boot App
   - type: web
-    name: tutor-app
-    runtime: docker
+    name: tutor
+    env: docker
     plan: free
     dockerfilePath: ./Dockerfile
     envVars:
-      - key: PORT
-        value: 8080
-      - key: SERVER_PORT
-        value: ${PORT}
       - key: SPRING_DATASOURCE_URL
-        value: jdbc:postgresql://<INTERNAL_HOSTNAME>:5432/<DB_NAME>
+        value: jdbc:postgresql://localhost:5432/tutorstudentDB
       - key: SPRING_DATASOURCE_USERNAME
-        value: <DB_USER>
+        value: postgres
       - key: SPRING_DATASOURCE_PASSWORD
-        value: <DB_PASSWORD>
-
-  # 🛠️ Adminer
-  - type: web
-    name: tutor-adminer
-    runtime: docker
-    image:
-      url: adminer
-    plan: free
-    envVars:
-      - key: ADMINER_DEFAULT_SERVER
-        value: <INTERNAL_HOSTNAME>
+        value: Nirjesh@123
+      - key: SERVER_PORT
+        value: 8080
