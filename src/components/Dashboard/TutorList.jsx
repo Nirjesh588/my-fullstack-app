@@ -274,7 +274,7 @@ const AccordionTutorList = () => {
                 style={styles.bookBtn}
                 onClick={() => setSelectedTutor(tutor)}
               >
-                Book Now
+                Request For Free Demo
               </button>
             </div>
           )}
