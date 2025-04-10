@@ -8,7 +8,7 @@ import TutorRegistration from './components/Tutor/TutorRegistration';
 function App() {
     return (
        
-<Router>
+<BrowserRouter>
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -17,7 +17,7 @@ function App() {
                 
                 {/* Add other routes */}
             </Routes>
-        </Router>
+            </BrowserRouter>
    
 
 
